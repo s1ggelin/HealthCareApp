@@ -2,8 +2,36 @@
 @model HealthCareWebb.Pages.Dashboard.AdminDashboardModel
 @{
     ViewData["Title"] = "Admin Dashboard";
+
+    var startDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday); // Måndag denna vecka
+    var daysOfWeek = new List<DateTime>();
+
+    for (int i = 0; i < 5; i++)
+    {
+        daysOfWeek.Add(startDate.AddDays(i)); // Lägg till måndag till fredag
+    }
 }
 
 <h2>Admin Dashboard</h2>
 <p>Welcome, @Model.Username</p>
 
+
+<div class="container">
+    @foreach (var day in daysOfWeek)
+    {
+        <div class="day-container">
+            <h4>@day.ToString("dddd, yyyy-MM-dd")</h4> <!-- Ex: Måndag 2024-11-13 -->
+            
+            <!-- Dropdown för att välja tider -->
+            <select id="timesForDay@day.DayOfWeek" class="form-select">
+                @for (var hour = 8; hour <= 16; hour++) 
+                {
+                    var timeSlot = $"{hour:00}:00 - {hour + 1:00}:00";
+                    <option value="@timeSlot">@timeSlot</option>
+                }
+            </select>
+        </div>
+    }
+</div>
+
+<button id="saveAvailability" class="btn btn-primary mt-3">Spara tillgänglighet</button>

@@ -5,19 +5,20 @@ a.navbar-brand {
   white-space: normal;
   text-align: center;
   word-break: break-all;
-  color: black;
+  color: white;
 }
 
 /* För navbaren i headern */
 header nav.navbar {
-    background-color: aquamarine !important;
+    background-color: #057D7A !important;
+
 }
 
 #sidebar.sidebar {
     height: 100%;
     min-height: 100vh;
-    background-color: aquamarine !important;
-}   
+    background-color: #057D7A !important; /* Exempel på bakgrundsfärg (blå) */
+}
 
 /* För navbar-länkar (Login och Register) */
 .nav-link {
@@ -28,8 +29,13 @@ header nav.navbar {
         color: #f8f9fa; /* Färg på hover-effekt (ljusare) */
 }
 
+.container.container-fluid {
+    display: flex !important;
+    height: 100vh !important;
+}
+
 a {
-  color: #0077cc;
+  color: white;
 }
 
 .btn-primary {

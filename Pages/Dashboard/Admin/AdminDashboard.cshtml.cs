@@ -19,3 +19,7 @@ namespace HealthCareWebb.Pages.Dashboard
         }
     }
 }
+
+//Possibility to select timeslots
+//Collect data in an array of objects
+//Verify that data is collected properly

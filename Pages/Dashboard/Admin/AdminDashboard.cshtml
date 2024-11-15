@@ -45,8 +45,12 @@
                             //format the time slot 
                             var timeSlot = $"{hour:00}:00 - {hour + 1:00}:00";
                             <div class="form-check">
-                                <input class="form-check-input time-checkbox" type="checkbox"
-                                       value="@timeSlot" id="timeSlot@day.DayOfWeek@hour data-day=@day.DayOfWeek" />
+                                <input class="form-check-input time-checkbox" 
+                                       type="checkbox"
+                                       value="@timeSlot" 
+                                       id="timeSlot@day.DayOfWeek@hour" 
+                                       data-day=@day.ToString("yyyy-MM-dd")
+                                       data-time="@timeSlot" />
                                 <label class="form-check-label" for="timeSlot@day.DayOfWeek@hour">
                                     @timeSlot
                                 </label>
@@ -60,3 +64,23 @@
 </div>
 
 <button id="saveAvailability" class="btn btn-primary mt-3">Spara tillgänglighet</button>
+
+<script>
+
+    document.getElementById('saveAvailability').addEventListener('click', () => {
+        const selectedSlots = [];
+
+        document.querySelectorAll('.time-checkbox:checked').forEach(checkbox => {
+            const day = checkbox.getAttribute('data-day'); // e.g., "2024-11-20"
+            const time = checkbox.getAttribute('data-time'); // e.g., "08:00 - 09:00"
+
+            selectedSlots.push({
+                day: day,
+                time: time
+            });
+        });
+
+        console.log(selectedSlots); // Verify the collected data in the console
+    });
+</script>
+

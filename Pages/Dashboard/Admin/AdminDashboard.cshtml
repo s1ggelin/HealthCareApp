@@ -2,8 +2,48 @@
 @model HealthCareWebb.Pages.Dashboard.AdminDashboardModel
 @{
     ViewData["Title"] = "Admin Dashboard";
+
+    @using System.Globalization;
+
 }
 
 <h2>Admin Dashboard</h2>
-<p>Welcome, @Model.Username</p>
+<p>Välkommen, @Model.Username</p>
 
+<form method="post" asp-page-handler="AddAvailability">
+    <input type="hidden" asp-for="CaregiverId" value="1" /> <!-- Replace with dynamic caregiver ID if needed -->
+
+    <div class="container">
+        <div class="row">
+            @foreach (var day in Model.DaysOfWeek)
+            {
+                <div class="col-md-2">
+                    <h4>@CultureInfo.CurrentCulture.TextInfo.ToTitleCase(day.ToString("dddd", new CultureInfo("sv-SE")).ToLower()) @day.ToString("dd-MM-yyyy")</h4>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton@day.DayOfWeek" data-bs-toggle="dropdown" aria-expanded="false">
+                            Markera Tillgänglighet
+                        </button>
+                        <div class="dropdown-menu p-3" aria-labelledby="dropdownMenuButton@day.DayOfWeek" style="min-width: 200px;">
+                            @for (var hour = 8; hour <= 16; hour++)
+                            {
+                                var timeSlotStart = new DateTime(day.Year, day.Month, day.Day, hour, 0, 0);
+                                <div class="form-check">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           name="SelectedTimeSlots"
+                                           value="@timeSlotStart.ToString("o")"
+                                           id="timeSlot@day.DayOfWeek@hour" />
+                                    <label class="form-check-label" for="timeSlot@day.DayOfWeek@hour">
+                                        @($"{hour:00}:00 - {hour + 1:00}:00")
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Spara tillgänglighet</button>
+</form>

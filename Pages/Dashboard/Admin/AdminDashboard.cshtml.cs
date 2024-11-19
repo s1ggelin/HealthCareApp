@@ -67,7 +67,7 @@ namespace HealthCareWebb.Pages.Dashboard
             };
 
             // Call the AvailabilityController API to add availability
-            var response = await _httpClient.PostAsJsonAsync("https://localhost:7085/api/availability", availability);
+            var response = await _httpClient.PostAsJsonAsync("http://localhost:5148/api/availability", availability);
 
             if (!response.IsSuccessStatusCode)
             {

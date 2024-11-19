@@ -74,6 +74,8 @@ namespace HealthCareWebb.Pages.Account
                     // Sign in the user
                     await HttpContext.SignInAsync("CookieAuth", claimsPrincipal);
 
+                    TempData["UserId"] = result.userId;
+
                     // Redirect based on roles
                     if (result.roles.Contains("Admin"))
                     {
@@ -109,6 +111,7 @@ namespace HealthCareWebb.Pages.Account
         {
             public string username { get; set; } // Match this with API response
             public List<string> roles { get; set; }
+            public string userId { get; set; }
         }
     }
 }

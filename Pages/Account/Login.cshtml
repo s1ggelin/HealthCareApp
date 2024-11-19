@@ -21,7 +21,7 @@
 {
     <script>
         // Safely inject the userId into the JavaScript
-        const userId = "@TempData["UserId"]";
+        const userId = "@Convert.ToString(TempData["UserId"])";
         localStorage.setItem("userId", userId); // Key: 'userId', Value: actual ID
         console.log("User ID saved to localStorage:", userId);
     </script>

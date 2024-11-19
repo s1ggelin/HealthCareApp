@@ -11,7 +11,8 @@
 <p>Välkommen, @Model.Username</p>
 
 <form method="post" asp-page-handler="AddAvailability">
-    <input type="hidden" id="caregiverId" value="CaregiverId" /> <!-- Replace with dynamic caregiver ID if needed -->
+    <!-- Hidden input for CaregiverId -->
+    <input type="hidden" id="caregiverId" name="CaregiverId" value="" />
 
     <div class="container">
         <div class="row">
@@ -46,19 +47,21 @@
     </div>
 
     <button type="submit" class="btn btn-primary mt-3">Spara tillgänglighet</button>
-    
+</form>
     <script>
         document.querySelector('form').addEventListener('submit', function (event) {
-                                const userId = localStorage.getItem('userId');
-                                if (!userId) {
-                                    console.error('User ID is missing in localStorage!');
-                                    alert('An error occurred: User ID is not available.');
-                                    event.preventDefault(); // Prevent form submission
-                                    return;
-                                }
+            const userId = localStorage.getItem('userId'); // Retrieve the user ID from localStorage
 
-                                console.log('Retrieved User ID from localStorage:', userId);
-                                document.getElementById('caregiverId').value = userId;
-                            });</script>
+            if (!userId) {
+                console.error('User ID is missing in localStorage!');
+                alert('An error occurred: User ID is not available.');
+                event.preventDefault(); // Prevent form submission
+                return;
+            }
 
-</form>
+            // Set the retrieved user ID into the hidden input field
+            document.getElementById('caregiverId').value = userId;
+
+            console.log('Caregiver ID set to:', userId);
+        });
+    </script>

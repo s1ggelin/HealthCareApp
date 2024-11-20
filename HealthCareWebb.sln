@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthCareWebb", "HealthCareWebb.csproj", "{283E69BA-A278-435C-B788-B87566404625}"
+	ProjectSection(ProjectDependencies) = postProject
+		{92EF149C-A990-4618-962A-C54E9DECB685} = {92EF149C-A990-4618-962A-C54E9DECB685}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthCareABApi", "..\HealthCareAPI\HealthCareABApi.csproj", "{92EF149C-A990-4618-962A-C54E9DECB685}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +20,10 @@ Global
 		{283E69BA-A278-435C-B788-B87566404625}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{283E69BA-A278-435C-B788-B87566404625}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{283E69BA-A278-435C-B788-B87566404625}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92EF149C-A990-4618-962A-C54E9DECB685}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92EF149C-A990-4618-962A-C54E9DECB685}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92EF149C-A990-4618-962A-C54E9DECB685}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92EF149C-A990-4618-962A-C54E9DECB685}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

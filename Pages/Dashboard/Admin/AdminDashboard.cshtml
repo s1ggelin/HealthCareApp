@@ -3,60 +3,65 @@
 @{
     ViewData["Title"] = "Admin Dashboard";
 
-    @using System.Globalization
+    @using System.Globalization;
 
-    // Start with todays date
-    var startDate = DateTime.Today;
-    var daysOfWeek = new List<DateTime>();
-
-
-    // Loop until we have five weekdays  
-    while (daysOfWeek.Count < 5)
-    {
-        // Only add day if it is a weekday
-        if (startDate.DayOfWeek != DayOfWeek.Saturday && startDate.DayOfWeek != DayOfWeek.Sunday)
-        {
-            daysOfWeek.Add(startDate);
-        }
-        // move to the next day
-        startDate = startDate.AddDays(1);
-    }
 }
 
 <h2>Admin Dashboard</h2>
 <p>Välkommen, @Model.Username</p>
 
+<form method="post" asp-page-handler="AddAvailability">
+    <!-- Hidden input for CaregiverId -->
+    <input type="hidden" id="caregiverId" name="CaregiverId" value="" />
 
-<div class="container">
-    <div class="row">
-        
-        @foreach (var day in daysOfWeek)
-        {
-            <div class="col-md-2">
-                <h4>@CultureInfo.CurrentCulture.TextInfo.ToTitleCase(day.ToString("dddd", new CultureInfo("sv-SE")).ToLower()) @day.ToString("dd-MM-yyyy")</h4>
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton@day.DayOfWeek" data-bs-toggle="dropdown" aria-expanded="false">
-                        Välj tider
-                    </button>
-                    <div class="dropdown-menu p-3" aria-labelledby="dropdownMenuButton@day.DayOfWeek" style="min-width: 200px;">
-                        
-                        @for (var hour = 8; hour <= 16; hour++)
-                        {
-                            //format the time slot 
-                            var timeSlot = $"{hour:00}:00 - {hour + 1:00}:00";
-                            <div class="form-check">
-                                <input class="form-check-input time-checkbox" type="checkbox"
-                                       value="@timeSlot" id="timeSlot@day.DayOfWeek@hour data-day=@day.DayOfWeek" />
-                                <label class="form-check-label" for="timeSlot@day.DayOfWeek@hour">
-                                    @timeSlot
-                                </label>
-                            </div>
-                        }
+    <div class="container">
+        <div class="row">
+            @foreach (var day in Model.DaysOfWeek)
+            {
+                <div class="col-md-2">
+                    <h4>@CultureInfo.CurrentCulture.TextInfo.ToTitleCase(day.ToString("dddd", new CultureInfo("sv-SE")).ToLower()) @day.ToString("dd-MM-yyyy")</h4>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton@day.DayOfWeek" data-bs-toggle="dropdown" aria-expanded="false">
+                            Markera Tillgänglighet
+                        </button>
+                        <div class="dropdown-menu p-3" aria-labelledby="dropdownMenuButton@day.DayOfWeek" style="min-width: 200px;">
+                            @for (var hour = 8; hour <= 16; hour++)
+                            {
+                                var timeSlotStart = new DateTime(day.Year, day.Month, day.Day, hour, 0, 0);
+                                <div class="form-check">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           name="SelectedTimeSlots"
+                                           value="@timeSlotStart.ToString("o")"
+                                           id="timeSlot@day.DayOfWeek@hour" />
+                                    <label class="form-check-label" for="timeSlot@day.DayOfWeek@hour">
+                                        @($"{hour:00}:00 - {hour + 1:00}:00")
+                                    </label>
+                                </div>
+                            }
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
-</div>
 
-<button id="saveAvailability" class="btn btn-primary mt-3">Spara tillgänglighet</button>
+    <button type="submit" class="btn btn-primary mt-3">Spara tillgänglighet</button>
+</form>
+    <script>
+        document.querySelector('form').addEventListener('submit', function (event) {
+            const userId = localStorage.getItem('userId'); // Retrieve the user ID from localStorage
+
+            if (!userId) {
+                console.error('User ID is missing in localStorage!');
+                alert('An error occurred: User ID is not available.');
+                event.preventDefault(); // Prevent form submission
+                return;
+            }
+
+            // Set the retrieved user ID into the hidden input field
+            document.getElementById('caregiverId').value = userId;
+
+            console.log('Caregiver ID set to:', userId);
+        });
+    </script>

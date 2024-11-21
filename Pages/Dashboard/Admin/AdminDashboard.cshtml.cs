@@ -30,7 +30,9 @@ namespace HealthCareWebb.Pages.Dashboard
 
         public List<DateTime> DaysOfWeek { get; private set; } = new List<DateTime>();
 
-        public async Task OnGetAsync()
+        public List<Appointment> UpcomingAppointments { get; private set; }
+
+        public async Task<IActionResult> OnGetAsync()
         {
             Username = User.Identity.Name;
 
@@ -46,7 +48,35 @@ namespace HealthCareWebb.Pages.Dashboard
                 startDate = startDate.AddDays(1);
             }
             DaysOfWeek = daysOfWeek;
+
+            var caregiverId = 1;
+            UpcomingAppointments = await GetUpcomingAppointments(caregiverId);
+
+            return Page();
         }
+
+        private async Task<List<Appointment>> GetUpcomingAppointments(int caregiverId)
+        {
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<List<Appointment>>($"http://localhost:5148/api/appointments/caregiver/{caregiverId}");
+
+                if (response == null)
+                {
+                    return new List<Appointment>(); // Returnera en tom lista om inga bokningar finns
+                }
+
+                // Filtrera bort bokningar som redan har passerat
+                return response.Where(a => a.DateTime > DateTime.Now).ToList();
+            }
+            catch (Exception ex)
+            {
+                // Hantera eventuella fel och logga dem
+                Console.Error.WriteLine($"Error fetching appointments: {ex.Message}");
+                return new List<Appointment>(); // Returnera en tom lista vid fel
+            }
+        }
+
 
         public async Task<IActionResult> OnPostAddAvailabilityAsync()
         {

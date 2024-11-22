@@ -2,8 +2,118 @@
 @model HealthCareWebb.Pages.Dashboard.UserDashboardModel
 @{
     ViewData["Title"] = "User Dashboard";
+
+    @using System.Globalization;
 }
 
+
+<ul class="nav nav-tabs" id="adminTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="upcoming-tab" data-bs-toggle="tab" href="#upcoming" role="tab" aria-controls="upcoming" aria-selected="true">Kommande bokningar</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="history-tab" data-bs-toggle="tab" href="#history" role="tab" aria-controls="history" aria-selected="false">Historik</a>
+    </li>
+</ul>
+
 <h2>User Dashboard</h2>
-<p>Welcome, @Model.Username</p>
+<p>Välkommen, @Model.Username</p>
+
+<div class="tab-content" id="UserTabsContent">
+    <!-- Kommande bokningar vy -->
+    <div class="tab-pane fade" id="upcoming" role="tabpanel" aria-labelledby="upcoming-tab">
+        <h3>Kommande bokningar</h3>
+        <input type="hidden" id="patientId" name="PatientId" value="" />
+
+        @if (Model.UpcomingAppointments != null && Model.UpcomingAppointments.Any())
+        {
+            <div class="row">
+                @foreach (var appointment in Model.UpcomingAppointments)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card d-flex flex-row rounded-3  ">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <!-- Vertikal information om bokningen -->
+                                <h5 class="card-title"><strong>Läkare:</strong> @appointment.CaregiverId</h5>
+                                <p class="card-text"><strong>Datum:</strong> @appointment.DateTime.ToString("yyyy-MM-dd")</p>
+                                <p class="card-text"><strong>Tid:</strong> @appointment.DateTime.ToString("HH:mm")</p>
+
+                                <button type="button"
+                                        class="btn btn-danger"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#cancelModal"
+                                        onclick="populateModal(@appointment.Id, '@appointment.CaregiverId', '@appointment.DateTime.ToString("yyyy-MM-dd")', '@appointment.DateTime.ToString("HH:mm")')">
+                                    Avboka
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p>Inga kommande bokningar.</p>
+        }
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Retrieve the hidden input for Patient ID
+                const patientIdInput = document.getElementById('patientId');
+                const userId = localStorage.getItem('userId'); // Retrieve userId from localStorage
+
+                if (!userId) {
+                    console.error('User ID is missing in localStorage!');
+                    alert('An error occurred: User ID is not available.');
+                    return; // Stop further execution if userId is not available
+                }
+
+                // Set the retrieved userId into the hidden input field
+                patientIdInput.value = userId;
+                console.log('Patient ID set to:', userId);
+
+            });
+        </script>
+
+    </div>
+
+    <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-3">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cancelModalLabel">Bekräfta avbokning</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Är du säker på att du vill avboka följande bokning?</p>
+                    <ul>
+                        <li><strong>Boknings-ID:</strong> <span id="modalAppointmentId"></span></li>
+                        <li><strong>Läkar-ID:</strong> <span id="modalCaregiverId"></span></li>
+                        <li><strong>Datum:</strong> <span id="modalDate"></span></li>
+                        <li><strong>Tid:</strong> <span id="modalTime"></span></li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
+                    <form method="post" asp-page-handler="CancelAppointment">
+                        <input type="hidden" id="modalAppointmentId" name="appointmentId" />
+                        <button type="submit" class="btn btn-danger">Avboka bokning</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Funktion för att fylla modalen med rätt data
+        function populateModal(appointmentId, caregiverId, date, time) {
+            document.getElementById('modalAppointmentId').textContent = appointmentId; // Fyller gömd input med boknings-ID
+            document.getElementById('modalCaregiverId').textContent = caregiverId; // Visar caregiver-ID i modalen
+            document.getElementById('modalDate').textContent = date; // Visar datum i modalen
+            document.getElementById('modalTime').textContent = time; // Visar tid i modalen
+        }
+    </script>
+</div>
+
+
 

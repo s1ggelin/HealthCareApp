@@ -56,17 +56,15 @@ namespace HealthCareWebb.Pages.Dashboard
                 return Page();
             }
 
-            // Convert the selected times into AvailableSlot objects
+            // Do not convert the time—store exactly as it is.
             var availableSlots = SelectedTimeSlots.ConvertAll(slot => new AvailableSlot { Date = slot });
 
-            // Create the availability object
             var availability = new Availability
             {
                 CaregiverId = CaregiverId,
                 AvailableSlots = availableSlots
             };
 
-            // Call the AvailabilityController API to add availability
             var response = await _httpClient.PostAsJsonAsync("http://localhost:5148/api/availability", availability);
 
             if (!response.IsSuccessStatusCode)

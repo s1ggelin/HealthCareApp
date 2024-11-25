@@ -2,6 +2,7 @@ using HealthCareABApi.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc;
 using HealthCareABApi.DTO;
+using System.Diagnostics;
 
 public class AppointmentsModel : PageModel
 {
@@ -15,13 +16,7 @@ public class AppointmentsModel : PageModel
     public List<AvailableSlotDto> AvailableSlots { get; private set; } = new List<AvailableSlotDto>();
 
     [BindProperty]
-    public DateTime SelectedSlot { get; set; }
-
-    [BindProperty]
-    public int CaregiverId { get; set; }
-
-    [BindProperty]
-    public int PatientId { get; set; } // Retrieved from localStorage or passed via hidden input
+    public BookAppointmentDto AppointmentBooking { get; set; } = new BookAppointmentDto();
 
     public async Task OnGetAsync()
     {
@@ -31,11 +26,13 @@ public class AppointmentsModel : PageModel
             var availabilities = await response.Content.ReadFromJsonAsync<List<Availability>>();
             if (availabilities != null)
             {
+                // Create AvailableSlotDto list that includes AvailabilityId
                 AvailableSlots = availabilities
                     .SelectMany(a => a.AvailableSlots.Select(slot => new AvailableSlotDto
                     {
+                        AvailabilityId = a.Id, // Add the availability ID
                         Date = slot.Date,
-                        CaregiverId = a.CaregiverId // Associate the caregiver ID with the slot
+                        CaregiverId = a.CaregiverId
                     }))
                     .ToList();
             }
@@ -48,22 +45,22 @@ public class AppointmentsModel : PageModel
 
     public async Task<IActionResult> OnPostBookAppointmentAsync()
     {
-        if (SelectedSlot == default || CaregiverId == 0 || PatientId == 0)
+        if (AppointmentBooking == null || AppointmentBooking.SelectedSlot == default ||
+            AppointmentBooking.CaregiverId == 0 || AppointmentBooking.PatientId == 0)
         {
             ModelState.AddModelError(string.Empty, "Invalid booking data.");
             return Page();
         }
 
-        // Create the appointment object
+        // Step 1: Book the appointment
         var appointment = new Appointment
         {
-            PatientId = PatientId,
-            CaregiverId = CaregiverId,
-            DateTime = SelectedSlot,
+            PatientId = AppointmentBooking.PatientId,
+            CaregiverId = AppointmentBooking.CaregiverId,
+            DateTime = AppointmentBooking.SelectedSlot, // Use the exact selected slot without conversion
             Status = AppointmentStatus.Scheduled
         };
 
-        // Step 1: Book the appointment
         var response = await _httpClient.PostAsJsonAsync("http://localhost:5148/api/appointments", appointment);
 
         if (!response.IsSuccessStatusCode)
@@ -72,20 +69,20 @@ public class AppointmentsModel : PageModel
             return Page();
         }
 
-        // Step 2: Remove the slot from availability
+        // Step 2: Remove the slot from availability using the `availabilityId`
         var updateResponse = await _httpClient.PutAsJsonAsync(
-            $"http://localhost:5148/api/availability/{CaregiverId}/update-slot",
-            SelectedSlot
+            $"http://localhost:5148/api/availability/{AppointmentBooking.AvailabilityId}/update-slot",
+            AppointmentBooking.SelectedSlot // Use the same selected slot value
         );
 
         if (!updateResponse.IsSuccessStatusCode)
         {
-            Console.WriteLine("Failed to update availability. Appointment booked, but availability slot still exists.");
+            Debug.WriteLine("Failed to update availability. Appointment booked, but availability slot still exists.");
+            Debug.WriteLine($"PUT URL: http://localhost:5148/api/availability/{AppointmentBooking.AvailabilityId}/update-slot");
+            Debug.WriteLine($"SelectedSlot (raw): {AppointmentBooking.SelectedSlot}");
         }
 
         TempData["Message"] = "Appointment booked successfully!";
         return RedirectToPage("/Dashboard/Index");
     }
-
-
 }

@@ -18,7 +18,8 @@
                         data-bs-toggle="modal"
                         data-bs-target="#confirmModal"
                         data-caregiverid="@slot.CaregiverId"
-                        data-slotdate="@slot.Date">
+                        data-slotdate="@slot.Date"
+                        data-availabilityid="@slot.AvailabilityId">
                     Book Appointment
                 </button>
             </div>
@@ -38,6 +39,7 @@
                     <input type="hidden" id="hiddenCaregiverId" name="CaregiverId" />
                     <input type="hidden" id="hiddenSlotDate" name="SelectedSlot" />
                     <input type="hidden" id="hiddenPatientId" name="PatientId" />
+                    <input type="hidden" id="hiddenAvailabilityId" name="AvailabilityId" /> <!-- Added hidden input for AvailabilityId -->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -54,13 +56,14 @@
         // Get the button that triggered the modal
         var button = event.relatedTarget;
 
-        // Fetch the CaregiverId and SlotDate from the button's data attributes
+        // Fetch the CaregiverId, SlotDate, and AvailabilityId from the button's data attributes
         var caregiverId = button.getAttribute('data-caregiverid');
         var slotDate = button.getAttribute('data-slotdate');
+        var availabilityId = button.getAttribute('data-availabilityid');
         var patientId = localStorage.getItem('userId'); // Retrieve the patient ID from localStorage
 
-        if (!caregiverId || !slotDate) {
-            console.error('CaregiverId or SlotDate is missing in the button attributes');
+        if (!caregiverId || !slotDate || !availabilityId) {
+            console.error('CaregiverId, SlotDate, or AvailabilityId is missing in the button attributes');
             return;
         }
 
@@ -68,9 +71,11 @@
         document.getElementById('hiddenCaregiverId').value = caregiverId;
         document.getElementById('hiddenSlotDate').value = slotDate;
         document.getElementById('hiddenPatientId').value = patientId;
+        document.getElementById('hiddenAvailabilityId').value = availabilityId; // Set the hidden AvailabilityId
 
         console.log('SlotDate:', slotDate);
         console.log('CaregiverId:', caregiverId);
         console.log('PatientId:', patientId);
+        console.log('AvailabilityId:', availabilityId); // Log the AvailabilityId to verify
     });
 </script>

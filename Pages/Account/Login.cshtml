@@ -4,6 +4,8 @@
     ViewData["Title"] = "Login";
 }
 
+<script src="site.js"></script>
+
 <h2>Login</h2>
 
 <form method="post">
@@ -17,15 +19,12 @@
     </div>
     <button type="submit">Login</button>
 </form>
+
 @if (TempData["UserId"] != null)
 {
-    <script>
-        // Safely inject the userId into the JavaScript
-        const userId = "@Convert.ToString(TempData["UserId"])";
-        localStorage.setItem("userId", userId); // Key: 'userId', Value: actual ID
-        console.log("User ID saved to localStorage:", userId);
-    </script>
+    <input type="hidden" id="userId" value="@TempData["UserId"]" />
 }
+
 
 @if (!string.IsNullOrEmpty(Model.ErrorMessage))
 {

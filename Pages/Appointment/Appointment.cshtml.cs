@@ -1,68 +1,91 @@
 using HealthCareABApi.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc;
+using HealthCareABApi.DTO;
 
 public class AppointmentsModel : PageModel
 {
-	private readonly HttpClient _httpClient;
+    private readonly HttpClient _httpClient;
 
-	public AppointmentsModel(IHttpClientFactory httpClientFactory)
-	{
-		_httpClient = httpClientFactory.CreateClient();
-	}
+    public AppointmentsModel(IHttpClientFactory httpClientFactory)
+    {
+        _httpClient = httpClientFactory.CreateClient();
+    }
 
-	public List<AvailableSlot> AvailableSlots { get; private set; } = new List<AvailableSlot>();
+    public List<AvailableSlotDto> AvailableSlots { get; private set; } = new List<AvailableSlotDto>();
 
-	[BindProperty]
-	public int CaregiverId { get; set; }
+    [BindProperty]
+    public DateTime SelectedSlot { get; set; }
 
-	[BindProperty]
-	public DateTime SelectedSlot { get; set; }
+    [BindProperty]
+    public int CaregiverId { get; set; }
 
-	[BindProperty]
-	public int UserId { get; set; } // Bind the user ID from the form
+    [BindProperty]
+    public int PatientId { get; set; } // Retrieved from localStorage or passed via hidden input
 
-	public async Task OnGetAsync(int caregiverId)
-	{
-		CaregiverId = caregiverId;
+    public async Task OnGetAsync()
+    {
+        var response = await _httpClient.GetAsync("http://localhost:5148/api/availability");
+        if (response.IsSuccessStatusCode)
+        {
+            var availabilities = await response.Content.ReadFromJsonAsync<List<Availability>>();
+            if (availabilities != null)
+            {
+                AvailableSlots = availabilities
+                    .SelectMany(a => a.AvailableSlots.Select(slot => new AvailableSlotDto
+                    {
+                        Date = slot.Date,
+                        CaregiverId = a.CaregiverId // Associate the caregiver ID with the slot
+                    }))
+                    .ToList();
+            }
+        }
+        else
+        {
+            ModelState.AddModelError(string.Empty, "Failed to load available slots.");
+        }
+    }
 
-		var response = await _httpClient.GetAsync($"http://localhost:5148/api/availability/caregiver/{CaregiverId}");
-		if (response.IsSuccessStatusCode)
-		{
-			AvailableSlots = await response.Content.ReadFromJsonAsync<List<AvailableSlot>>();
-		}
-	}
+    public async Task<IActionResult> OnPostBookAppointmentAsync()
+    {
+        if (SelectedSlot == default || CaregiverId == 0 || PatientId == 0)
+        {
+            ModelState.AddModelError(string.Empty, "Invalid booking data.");
+            return Page();
+        }
 
-	public async Task<IActionResult> OnPostBookAppointmentAsync()
-	{
-		if (SelectedSlot == DateTime.MinValue)
-		{
-			ModelState.AddModelError(string.Empty, "Please select a valid slot.");
-			return Page();
-		}
+        // Create the appointment object
+        var appointment = new Appointment
+        {
+            PatientId = PatientId,
+            CaregiverId = CaregiverId,
+            DateTime = SelectedSlot,
+            Status = AppointmentStatus.Scheduled
+        };
 
-		if (UserId == 0)
-		{
-			ModelState.AddModelError(string.Empty, "User ID is missing. Please log in again.");
-			return Page();
-		}
+        // Step 1: Book the appointment
+        var response = await _httpClient.PostAsJsonAsync("http://localhost:5148/api/appointments", appointment);
 
-		var appointment = new Appointment
-		{
-			CaregiverId = CaregiverId,
-			PatientId = UserId, // Use the user ID from the form
-			DateTime = SelectedSlot,
-			Status = AppointmentStatus.Scheduled
-		};
+        if (!response.IsSuccessStatusCode)
+        {
+            ModelState.AddModelError(string.Empty, "Failed to book the appointment. Please try again.");
+            return Page();
+        }
 
-		var response = await _httpClient.PostAsJsonAsync("http://localhost:5148/api/appointments", appointment);
+        // Step 2: Remove the slot from availability
+        var updateResponse = await _httpClient.PutAsJsonAsync(
+            $"http://localhost:5148/api/availability/{CaregiverId}/update-slot",
+            SelectedSlot
+        );
 
-		if (!response.IsSuccessStatusCode)
-		{
-			ModelState.AddModelError(string.Empty, "Failed to book the appointment. Please try again.");
-			return Page();
-		}
+        if (!updateResponse.IsSuccessStatusCode)
+        {
+            Console.WriteLine("Failed to update availability. Appointment booked, but availability slot still exists.");
+        }
 
-		return RedirectToPage("/Appointment/Confirmation");
-	}
+        TempData["Message"] = "Appointment booked successfully!";
+        return RedirectToPage("/Dashboard/Index");
+    }
+
+
 }

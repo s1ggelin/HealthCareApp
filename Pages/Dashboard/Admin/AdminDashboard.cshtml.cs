@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -22,6 +23,8 @@ namespace HealthCareWebb.Pages.Dashboard
 
         public string Username { get; private set; }
 
+        public string UserId { get; private set; }
+
         [BindProperty]
         public int CaregiverId { get; set; }
 
@@ -36,6 +39,9 @@ namespace HealthCareWebb.Pages.Dashboard
         {
             Username = User.Identity.Name;
 
+            UserId = User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value;
+            Console.WriteLine("UserId " + UserId);
+
             var startDate = DateTime.Today;
             var daysOfWeek = new List<DateTime>();
 
@@ -49,7 +55,7 @@ namespace HealthCareWebb.Pages.Dashboard
             }
             DaysOfWeek = daysOfWeek;
 
-            var caregiverId = 1;
+            var caregiverId = int.Parse(UserId);
             UpcomingAppointments = await GetUpcomingAppointments(caregiverId);
 
             return Page();
@@ -77,7 +83,6 @@ namespace HealthCareWebb.Pages.Dashboard
             }
         }
 
-
         public async Task<IActionResult> OnPostAddAvailabilityAsync()
         {
             if (SelectedTimeSlots == null || SelectedTimeSlots.Count == 0)
@@ -103,6 +108,33 @@ namespace HealthCareWebb.Pages.Dashboard
             {
                 ModelState.AddModelError(string.Empty, "Failed to add availability. Please try again.");
                 return Page();
+            }
+
+            return Page();
+        }
+        public async Task<IActionResult> OnPostCancelAppointmentAsync(int appointmentId)
+        {
+            try
+            {
+                if (appointmentId == 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid appointment ID.");
+                    return Page();
+                }
+
+                var response = await _httpClient.DeleteAsync($"http://localhost:5148/api/appointments/{appointmentId}");
+                if (!response.IsSuccessStatusCode)
+                {
+                    TempData["SuccessMessage"] = "Bokningen har avbokats.";
+                }
+                else
+                {
+                    TempData["Errormessage"] = $"Kunde inte avboka bokningen. Fel: {await response.Content.ReadAsStringAsync()}";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Ett fel uppstod vid avbokning: {ex.Message}";
             }
 
             return Page();

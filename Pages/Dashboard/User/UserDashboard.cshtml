@@ -18,6 +18,7 @@
 
 <h2>User Dashboard</h2>
 <p>Välkommen, @Model.Username</p>
+<p>Welcome, your User ID is: @Model.UserId</p>
 
 <div class="tab-content" id="UserTabsContent">
     <!-- Kommande bokningar vy -->
@@ -55,25 +56,6 @@
         {
             <p>Inga kommande bokningar.</p>
         }
-
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                // Retrieve the hidden input for Patient ID
-                const patientIdInput = document.getElementById('patientId');
-                const userId = localStorage.getItem('userId'); // Retrieve userId from localStorage
-
-                if (!userId) {
-                    console.error('User ID is missing in localStorage!');
-                    alert('An error occurred: User ID is not available.');
-                    return; // Stop further execution if userId is not available
-                }
-
-                // Set the retrieved userId into the hidden input field
-                patientIdInput.value = userId;
-                console.log('Patient ID set to:', userId);
-
-            });
-        </script>
 
     </div>
 

@@ -6,7 +6,7 @@
 
 <h2>Login</h2>
 
-<form method="post" id="loginform">
+<form method="post">
     <div>
         <label asp-for="Username">Username:</label>
         <input asp-for="Username" type="text" />
@@ -18,14 +18,7 @@
     <button type="submit">Login</button>
 </form>
 
-@if (TempData["UserId"] != null)
-{
-    <input type="hidden" id="userId" value="@TempData["UserId"]" />
-}
-
 @if (!string.IsNullOrEmpty(Model.ErrorMessage))
 {
     <p style="color:red;">@Model.ErrorMessage</p>
 }
-
-<script src="~/js/site.js" asp-append-version="true"></script>

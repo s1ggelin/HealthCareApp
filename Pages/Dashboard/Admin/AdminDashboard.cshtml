@@ -18,6 +18,7 @@
 
 <h2>Admin Dashboard</h2>
 <p>Välkommen, @Model.Username</p>
+<p>Welcome, your User ID is: @Model.UserId</p>
 
 <div class="tab-content" id="adminTabsContent">
     <!-- Tillgänglighet vy -->
@@ -34,7 +35,7 @@
                             <h4>@CultureInfo.CurrentCulture.TextInfo.ToTitleCase(day.ToString("dddd", new CultureInfo("sv-SE")).ToLower()) @day.ToString("dd-MM-yyyy")</h4>
                             <div class="dropdown">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton@day.DayOfWeek" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Markera Tillgänglighet
+                                    Tillgänglighet
                                 </button>
                                 <div class="dropdown-menu p-3" aria-labelledby="dropdownMenuButton@day.DayOfWeek" style="min-width: 200px;">
                                     @for (var hour = 8; hour <= 16; hour++)
@@ -61,23 +62,6 @@
             <button type="submit" class="btn btn-primary mt-3">Spara tillgänglighet</button>
         </form>
 
-        <script>
-            document.querySelector('form').addEventListener('submit', function (event) {
-                const userId = localStorage.getItem('userId'); // Retrieve the user ID from localStorage
-
-                if (!userId) {
-                    console.error('User ID is missing in localStorage!');
-                    alert('An error occurred: User ID is not available.');
-                    event.preventDefault(); // Prevent form submission
-                    return;
-                }
-
-                // Set the retrieved user ID into the hidden input field
-                document.getElementById('caregiverId').value = userId;
-
-                console.log('Caregiver ID set to:', userId);
-            });
-        </script>
     </div>
     <!-- Kommande bokningar vy -->
     <div class="tab-pane fade" id="upcoming" role="tabpanel" aria-labelledby="upcoming-tab">
@@ -143,12 +127,13 @@
     </div>
 
     <script>
-    // Funktion för att fylla modalen med rätt data
-    function populateModal(appointmentId, patientId, date, time) {
-        document.getElementById('modalAppointmentId').textContent = appointmentId; // Fyller gömd input med boknings-ID
-        document.getElementById('modalPatientId').textContent = patientId; // Visar patient-ID i modalen
-        document.getElementById('modalDate').textContent = date; // Visar datum i modalen
-        document.getElementById('modalTime').textContent = time; // Visar tid i modalen
-    }
-</script>
+        // Funktion för att fylla modalen med rätt data
+        function populateModal(appointmentId, patientId, date, time) {
+            document.getElementById('modalAppointmentId').textContent = appointmentId; // Fyller gömd input med boknings-ID
+            document.getElementById('modalPatientId').textContent = patientId; // Visar patient-ID i modalen
+            document.getElementById('modalDate').textContent = date; // Visar datum i modalen
+            document.getElementById('modalTime').textContent = time; // Visar tid i modalen
+        
+        };
+    </script>
 </div>

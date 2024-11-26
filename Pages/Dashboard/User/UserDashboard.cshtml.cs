@@ -13,6 +13,9 @@ namespace HealthCareWebb.Pages.Dashboard
     public class UserDashboardModel : PageModel
     {
         public string Username { get; private set; }
+
+        public string UserId { get; private set; }
+
         public List<string> UserRoles { get; private set; } = new List<string>();
 
         private readonly HttpClient _httpClient;
@@ -31,6 +34,9 @@ namespace HealthCareWebb.Pages.Dashboard
         {
             Username = User.Identity.Name;
 
+                        UserId = User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value;
+
+
             // Output claims for debugging purposes
             foreach (var claim in User.Claims)
             {
@@ -41,7 +47,7 @@ namespace HealthCareWebb.Pages.Dashboard
                 Console.WriteLine($"Claim Type: {claim.Type}, Value: {claim.Value}");
             }
 
-            var patientId = PatientId;
+            var patientId = int.Parse(UserId);
             UpcomingAppointments = await GetUpcomingAppointments(patientId);
 
             return Page();

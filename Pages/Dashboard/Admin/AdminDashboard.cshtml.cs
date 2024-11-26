@@ -83,7 +83,6 @@ namespace HealthCareWebb.Pages.Dashboard
             }
         }
 
-
         public async Task<IActionResult> OnPostAddAvailabilityAsync()
         {
             if (SelectedTimeSlots == null || SelectedTimeSlots.Count == 0)

@@ -59,7 +59,8 @@ namespace HealthCareWebb.Pages.Account
 
                     var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, result.username)
+                new Claim(ClaimTypes.Name, result.username),
+                new Claim("UserId", result.userId.ToString())
             };
 
                     // Add user roles as claims
@@ -74,7 +75,7 @@ namespace HealthCareWebb.Pages.Account
                     // Sign in the user
                     await HttpContext.SignInAsync("CookieAuth", claimsPrincipal);
 
-                    TempData["UserId"] = result.userId.ToString();
+                    //TempData["UserId"] = result.userId.ToString();
 
                     // Redirect based on roles
                     if (result.roles.Contains("Admin"))

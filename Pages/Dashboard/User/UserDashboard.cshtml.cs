@@ -107,7 +107,7 @@ namespace HealthCareWebb.Pages.Dashboard
                 TempData["ErrorMessage"] = $"Ett fel uppstod vid avbokning: {ex.Message}";
             }
 
-            return RedirectToPage("/Dashboard/Admin/AdminDashboard");
+            return RedirectToPage("/Dashboard/User/UserDashboard");
         }
     }
 }

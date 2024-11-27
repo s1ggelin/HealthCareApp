@@ -117,8 +117,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
-                    <form method="post" asp-page-handler="CancelAppointment">
-                        <input type="hidden" id="modalAppointmentId" name="appointmentId" />
+                    <form method="post" asp-page-handler="DeleteAppointment">
+                        <input type="hidden" asp-for="AppointmentId" id="hiddenAppointmentId" />
                         <button type="submit" class="btn btn-danger">Avboka bokning</button>
                     </form>
                 </div>
@@ -127,13 +127,14 @@
     </div>
 
     <script>
-        // Funktion för att fylla modalen med rätt data
         function populateModal(appointmentId, patientId, date, time) {
             document.getElementById('modalAppointmentId').textContent = appointmentId; // Fyller gömd input med boknings-ID
             document.getElementById('modalPatientId').textContent = patientId; // Visar patient-ID i modalen
             document.getElementById('modalDate').textContent = date; // Visar datum i modalen
             document.getElementById('modalTime').textContent = time; // Visar tid i modalen
-        
+
+            document.getElementById('hiddenAppointmentId').value = appointmentId;
+            console.log('Appointment ID set:', appointmentId);
         };
     </script>
 </div>

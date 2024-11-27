@@ -26,6 +26,9 @@ namespace HealthCareWebb.Pages.Dashboard
         public string UserId { get; private set; }
 
         [BindProperty]
+        public int AppointmentId { get; set; }
+
+        [BindProperty]
         public int CaregiverId { get; set; }
 
         [BindProperty]
@@ -61,7 +64,7 @@ namespace HealthCareWebb.Pages.Dashboard
             return Page();
         }
 
-        private async Task<List<Appointment>> GetUpcomingAppointments(int caregiverId)
+        public async Task<List<Appointment>> GetUpcomingAppointments(int caregiverId)
         {
             try
             {
@@ -112,15 +115,18 @@ namespace HealthCareWebb.Pages.Dashboard
 
             return Page();
         }
-        public async Task<IActionResult> OnPostCancelAppointmentAsync(int appointmentId)
+        public async Task<IActionResult> OnPostDeleteAppointmentAsync(int appointmentId)
         {
             try
             {
                 if (appointmentId == 0)
                 {
                     ModelState.AddModelError(string.Empty, "Invalid appointment ID.");
+                    Debug.WriteLine("Appointment ID:" + appointmentId);
                     return Page();
                 }
+
+                Debug.WriteLine($"Attempting to delete appointment with ID: {appointmentId} at {DateTime.Now}");
 
                 var response = await _httpClient.DeleteAsync($"http://localhost:5148/api/appointments/{appointmentId}");
                 if (!response.IsSuccessStatusCode)
@@ -137,7 +143,7 @@ namespace HealthCareWebb.Pages.Dashboard
                 TempData["ErrorMessage"] = $"Ett fel uppstod vid avbokning: {ex.Message}";
             }
 
-            return Page();
+            return RedirectToPage("/Dashboard/Admin/AdminDashboard");
         }
     }
 }

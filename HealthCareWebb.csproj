@@ -29,7 +29,6 @@
     <None Remove="Pages\Dashboard\Admin\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Pages\Account\" />
     <Folder Include="Pages\Dashboard\" />
     <Folder Include="Pages\Dashboard\User\" />
     <Folder Include="Pages\Dashboard\Admin\" />

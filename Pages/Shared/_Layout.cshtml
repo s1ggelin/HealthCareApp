@@ -23,12 +23,24 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
 
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-page="/Account/Login">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-page="/Account/Register">Registering</a>
-                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <form asp-page="/Account/Logout" method="post" class="nav-link" style="display:inline;">
+                                    <input type="hidden" name="returnUrl" value="/" />
+                                    <button type="submit" class="btn btn-link text-light p-0 border-0 bg-transparent">Logga ut</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Account/Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Account/Register">Registering</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
@@ -42,14 +54,18 @@
                 <div class="position-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" asp-area="" asp-page="/Index">
-                                Dashboard
-                            </a>
+                            <form asp-area="" asp-page="/Index" method="get" style="display:inline;">
+                                <button type="submit" class="btn btn-link text-light p-0 border-0 bg-transparent" style="text-decoration: none;">
+                                    Dashboard
+                                </button>
+                            </form>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/Appointment">
-                                Bokning
-                            </a>
+                            <form asp-area="" asp-page="/Appointment" method="get" style="display:inline;">
+                                <button type="submit" class="btn btn-link text-light p-0 border-0 bg-transparent" style="text-decoration: none;">
+                                    Bokning
+                                </button>
+                            </form>
                         </li>
                     </ul>
                 </div>

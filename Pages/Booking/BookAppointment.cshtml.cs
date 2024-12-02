@@ -30,9 +30,7 @@ namespace HealthCareWebb.Pages.Booking
 
             UserId = User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value;
 
-            var patientId = int.Parse(UserId);
-
-            Debug.WriteLine("PatientID: " + patientId);
+            var patientId = int.Parse(UserId);           
 
             var response = await _httpClient.GetAsync("http://localhost:5148/api/availability");
             if (response.IsSuccessStatusCode)
@@ -40,6 +38,9 @@ namespace HealthCareWebb.Pages.Booking
                 var availabilities = await response.Content.ReadFromJsonAsync<List<Availability>>();
                 if (availabilities != null)
                 {
+
+                    var currentTime = DateTime.UtcNow;
+
                     AvailableSlots = availabilities
                         .SelectMany(a => a.AvailableSlots.Select(slot => new AvailableSlotDto
                         {
@@ -47,7 +48,10 @@ namespace HealthCareWebb.Pages.Booking
                             Date = slot.Date,
                             CaregiverId = a.CaregiverId
                         }))
+                        .OrderBy(slot => slot.Date)
+                        .Where(slot => slot.Date >= currentTime)
                         .ToList();
+                        
                 }
             }
             else

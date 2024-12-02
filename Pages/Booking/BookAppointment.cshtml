@@ -10,9 +10,9 @@
     {
         <div class="card mb-3">
             <div class="card-body">
-                <p>Caregiver ID: @slot.CaregiverId</p>
-                <p>Date: @slot.Date.ToString("dd MMM yyyy")</p>
-                <p>Time: @slot.Date.ToString("HH:mm")</p>
+                <p>Läkare ID: @slot.CaregiverId</p>
+                <p>Datum: @slot.Date.ToString("dd MMM yyyy")</p>
+                <p>Tid: @slot.Date.ToString("HH:mm") - @slot.Date.AddHours(1).ToString("HH:mm")</p>
 
                 <button type="button" class="btn btn-primary"
                         data-bs-toggle="modal"
@@ -20,7 +20,8 @@
                         data-caregiverid="@slot.CaregiverId"
                         data-slotdate="@slot.Date"
                         data-availabilityid="@slot.AvailabilityId">
-                    Book Appointment
+                    
+                    Boka Tid
                 </button>
             </div>
         </div>
@@ -30,22 +31,22 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="confirmModalLabel">Confirm Booking</h5>
+                    <h5 class="modal-title" id="confirmModalLabel">Bekräfta tid</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to book this appointment?
                     <p><strong>Caregiver ID:</strong> <span id="modalCaregiverId"></span></p>
-                    <p><strong>Date:</strong> <span id="modalSlotDate"></span></p>
-                    <p><strong>Time:</strong> <span id="modalSlotTime"></span></p>
+                    <p><strong>Datum:</strong> <span id="modalSlotDate"></span></p>
+                    <p><strong>Tid:</strong> <span id="modalSlotTime"></span></p>
                     <input type="hidden" id="hiddenCaregiverId" name="AppointmentBooking.CaregiverId" />
                     <input type="hidden" id="hiddenSlotDate" name="AppointmentBooking.SelectedSlot" />
                     <input type="hidden" id="hiddenPatientId" name="PatientId" />
                     <input type="hidden" id="hiddenAvailabilityId" name="AppointmentBooking.AvailabilityId" /> 
+                    Är du säker på att du vill boka mötet?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Confirm</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
+                    <button type="submit" class="btn btn-primary">Bekräfta</button>
                 </div>
             </div>
         </div>

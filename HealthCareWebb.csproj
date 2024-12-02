@@ -34,7 +34,7 @@
     <Folder Include="Pages\Dashboard\Admin\" />
   </ItemGroup>
   <ItemGroup>
-	  <ProjectReference Include="..\HealthCareAPI\HealthCareABApi.csproj" />
+	  <ProjectReference Include="..\..\HealthCareABApi\HealthCareABApi\HealthCareABApi.csproj" />
 
   </ItemGroup>
 </Project>

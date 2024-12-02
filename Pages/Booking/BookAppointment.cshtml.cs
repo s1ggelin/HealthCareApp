@@ -111,7 +111,14 @@ namespace HealthCareWebb.Pages.Booking
             }
 
             TempData["Message"] = "Appointment booked successfully!";
-            return RedirectToPage("/Dashboard/Index");
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToPage("/Dashboard/Admin/AdminDashboard", new { tab = "upcoming" });
+            }
+            else
+            {
+                return RedirectToPage("/Dashboard/User/UserDashboard");
+            }
             
         }
     }

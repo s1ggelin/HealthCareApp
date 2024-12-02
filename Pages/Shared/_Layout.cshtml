@@ -50,28 +50,49 @@
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-teal sidebar">
-                <div class="position-sticky">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <form asp-area="" asp-page="/Index" method="get" style="display:inline;">
-                                <button type="submit" class="btn btn-link text-light p-0 border-0 bg-transparent" style="text-decoration: none;">
-                                    Dashboard
-                                </button>
-                            </form>
-                        </li>
-                        <li class="nav-item">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-teal sidebar">
+                    <div class="position-sticky">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <form asp-area="" asp-page="/Dashboard/Admin/AdminDashboard" method="get" style="display:inline;">
+                                        <button type="submit" class="btn btn-link text-light p-0 border-0 bg-transparent" style="text-decoration: none;">
+                                            Dashboard
+                                        </button>
+                                    </form>
+                                }
+                                else if (User.IsInRole("User"))
+                                {
+                                    <form asp-area="" asp-page="/Dashboard/User/UserDashboard" method="get" style="display:inline;">
+                                        <button type="submit" class="btn btn-link text-light p-0 border-0 bg-transparent" style="text-decoration: none;">
+                                            Dashboard
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form asp-area="" asp-page="/Index" method="get" style="display:inline;">
+                                        <button type="submit" class="btn btn-link text-light p-0 border-0 bg-transparent" style="text-decoration: none;">
+                                            Dashboard
+                                        </button>
+                                    </form>
+                                }
+                            </li>
+                            <li class="nav-item">
 
-                            <form asp-area="" asp-page="/Appointment" method="get" style="display:inline;">
-                                <button type="submit" class="btn btn-link text-light p-0 border-0 bg-transparent" style="text-decoration: none;">
-                                    Bokning
-                                </button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-
+                                <form asp-area="" asp-page="/Booking/BookAppointment" method="get" style="display:inline;">
+                                    <button type="submit" class="btn btn-link text-light p-0 border-0 bg-transparent" style="text-decoration: none;">
+                                        Bokning
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            }
             <!-- Main content -->
             <main role="main" class="col-md-9 ms-sm-auto col-lg-10 px-4">
                 @RenderBody()

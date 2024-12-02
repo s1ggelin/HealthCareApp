@@ -3,18 +3,18 @@
 @{
 }
 
-<h2>Book an Appointment</h2>
+<h2>Boka möte</h2>
 
 <form method="post" asp-page-handler="BookAppointment">
     @foreach (var slot in Model.AvailableSlots)
     {
         <div class="card mb-3">
             <div class="card-body">
-                <p>Läkare ID: @slot.CaregiverId</p>
-                <p>Datum: @slot.Date.ToString("dd MMM yyyy")</p>
-                <p>Tid: @slot.Date.ToString("HH:mm") - @slot.Date.AddHours(1).ToString("HH:mm")</p>
+                <p><strong>Läkar-ID: </strong>@slot.CaregiverId</p>
+                <p><strong>Datum:</strong> @slot.Date.ToString("dd-MMM-yyyy")</p>
+                <p><strong>Tid:</strong> @slot.Date.ToString("HH:mm") - @slot.Date.AddHours(1).ToString("HH:mm")</p>
 
-                <button type="button" class="btn btn-primary"
+                <button type="button" class="btn btn-teal"
                         data-bs-toggle="modal"
                         data-bs-target="#confirmModal"
                         data-caregiverid="@slot.CaregiverId"
@@ -35,7 +35,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p><strong>Caregiver ID:</strong> <span id="modalCaregiverId"></span></p>
+                    <p><strong>Läkar-ID:</strong> <span id="modalCaregiverId"></span></p>
                     <p><strong>Datum:</strong> <span id="modalSlotDate"></span></p>
                     <p><strong>Tid:</strong> <span id="modalSlotTime"></span></p>
                     <input type="hidden" id="hiddenCaregiverId" name="AppointmentBooking.CaregiverId" />
@@ -46,7 +46,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
-                    <button type="submit" class="btn btn-primary">Bekräfta</button>
+                    <button type="submit" class="btn btn-teal">Bekräfta</button>
                 </div>
             </div>
         </div>

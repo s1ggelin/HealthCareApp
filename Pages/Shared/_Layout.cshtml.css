@@ -71,8 +71,16 @@ button.accept-policy {
   bottom: 0;
   width: 100%;
   white-space: nowrap;
-  line-height: 60px;
+  line-height: normal;
   text-align: center;
   background-color: teal;
+  padding: 10px;
 }
 
+.text-primary {
+    color: #057D7A !important;
+}
+
+.bg-primary {
+    background-color: #057D7A !important;
+}

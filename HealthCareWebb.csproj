@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -34,6 +34,7 @@
     <Folder Include="Pages\Dashboard\Admin\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\HealthCareABApi\HealthCareABApi\HealthCareABApi.csproj" />
+	  <ProjectReference Include="..\..\HealthCareABApi\HealthCareABApi\HealthCareABApi.csproj" />
+
   </ItemGroup>
 </Project>

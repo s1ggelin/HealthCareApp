@@ -88,6 +88,15 @@ namespace HealthCareWebb.Pages.Dashboard
 
         public async Task<IActionResult> OnPostAddAvailabilityAsync()
         {
+            UserId = User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value;
+
+            if (string.IsNullOrEmpty(UserId) || !int.TryParse(UserId, out var caregiverId))
+            {
+                ModelState.AddModelError(string.Empty, "Invalid or missing UserId claim.");
+                Debug.WriteLine("Failed to retrieve UserId from claims.");
+                return Page();
+            }
+
             if (SelectedTimeSlots == null || SelectedTimeSlots.Count == 0)
             {
                 ModelState.AddModelError(string.Empty, "Please add at least one available slot.");
@@ -100,7 +109,7 @@ namespace HealthCareWebb.Pages.Dashboard
             // Create the availability object
             var availability = new Availability
             {
-                CaregiverId = CaregiverId,
+                CaregiverId = caregiverId,
                 AvailableSlots = availableSlots
             };
 

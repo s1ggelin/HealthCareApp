@@ -1,60 +1,79 @@
 ﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
-  color: white;
-}
-
-/* För navbaren i headern */
+/* Navbar Styling */
 header nav.navbar {
-    background-color: #057D7A !important;
-
+    background-color: #045E5C !important; /* Slightly darker than sidebar */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    height: 70px; /* Consistent height */
+    z-index: 1020; /* Ensure navbar is above other content */
 }
 
+    /* Navbar Title (Health Care AB) */
+    header nav.navbar a.navbar-brand {
+        color: white;
+        font-size: 1.6rem;
+        font-weight: bold;
+        text-transform: uppercase; /* Optional */
+        letter-spacing: 1px; /* Adds modern spacing */
+        text-decoration: none; /* Remove underline */
+    }
+
+        header nav.navbar a.navbar-brand:hover {
+            color: #f8f9fa; /* Subtle hover effect */
+        }
+
+/* Navbar Links (e.g., Logga ut) */
+.navbar-nav .nav-link {
+    color: #f8f9fa !important; /* Match the theme */
+    font-weight: bold; /* Bold for clarity */
+    font-size: 1rem; /* Adjust size for readability */
+    transition: color 0.3s ease; /* Smooth hover effect */
+}
+
+    .navbar-nav .nav-link:hover {
+        color: #ffffff; /* Slightly brighter on hover */
+    }
+
+/* Sidebar Styling */
 #sidebar.sidebar {
-    height: 100%;
-    min-height: 100vh;
-    background-color: #057D7A !important; /* Exempel på bakgrundsfärg (blå) */
+    background-color: #057D7A !important;
+    height: calc(100vh - 70px); /* Adjust for navbar height */
+    padding-top: 20px; /* Space at the top */
+    border-right: 2px solid #034E4B; /* Subtle border for separation */
+    position: fixed;
+    top: 70px; /* Align with navbar */
+    width: 220px; /* Adjust sidebar width */
+    overflow-y: auto; /* Scrollable if content overflows */
 }
 
-/* För navbar-länkar (Login och Register) */
-.nav-link {
-    color: black; /* Gör texten vit */
-} 
-
-.nav-link:hover {
-        color: #f8f9fa; /* Färg på hover-effekt (ljusare) */
+/* Sidebar Items */
+#sidebar .nav-item button {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: white;
+    text-align: left;
+    padding: 10px 15px;
+    width: 100%;
+    background: transparent;
+    border: none;
+    transition: background-color 0.3s, transform 0.3s ease; /* Smooth hover effect */
 }
 
-.container.container-fluid {
-    display: flex !important;
-    height: 100vh !important;
-}
+    /* Sidebar Hover Effect */
+    #sidebar .nav-item button:hover {
+        background-color: #034E4B; /* Darker hover effect */
+        color: #f8f9fa; /* Lighten text on hover */
+        transform: translateX(5px); /* Subtle slide effect */
+        cursor: pointer; /* Pointer cursor */
+    }
 
-a {
-  color: white;
-}
-
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-
-.border-top {
-  border-top: 1px solid #e5e5e5;
-}
-.border-bottom {
-  border-bottom: 1px solid #e5e5e5;
+/* Sidebar Divider */
+#sidebar .nav-item-divider {
+    height: 1px;
+    background: #045E5C;
+    margin: 15px 0;
 }
 
 .box-shadow {
@@ -76,3 +95,16 @@ button.accept-policy {
   background-color: teal;
 }
 
+
+@media (max-width: 768px) {
+    #sidebar.sidebar {
+        width: 100%; /* Full width on smaller screens */
+        height: auto;
+        position: relative;
+        top: 0; /* Remove offset */
+    }
+
+    main {
+        margin-left: 0; /* Remove margin for main content */
+    }
+}

@@ -10,10 +10,10 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-teal border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-teal box-shadow">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">
-                    <img src="~/icons/health_care_logo.svg" alt="Health Care Logo" style="height: 100%; max-height: 70px;">
+                <a class="navbar-brand" asp-area="" asp-page="/Index" style="color: white; font-size:25px; font-weight: bold;">
+                    <img src="~/icons/health_care_logo.svg" alt="Health Care Logo" style="height: 100%; max-height: 100px;">
                     Health Care AB
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -21,31 +21,37 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-
                     <ul class="navbar-nav ms-auto">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item">
-                                <form asp-page="/Account/Logout" method="post" class="nav-link" style="display:inline;">
-                                    <input type="hidden" name="returnUrl" value="/" />
-                                    <button type="submit" class="btn btn-link text-light p-0 border-0 bg-transparent">Logga ut</button>
-                                </form>
-                            </li>
+                            <form asp-page="/Account/Logout" method="post" style="display: inline;">
+                                <input type="hidden" name="returnUrl" value="/" />
+                                <button type="submit" class="Btn">
+                                    <div class="sign">
+                                        <svg viewBox="0 0 512 512">
+                                            <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="text">Logout</div>
+                                </button>
+                            </form>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-page="/Account/Login">Login</a>
+                                <a class="login-button" asp-page="/Account/Login">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-page="/Account/Register">Registering</a>
+                                <a class="register-button" asp-page="/Account/Register">Registering</a>
                             </li>
+
                         }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+
 
     <div class="container-fluid">
         <div class="row">
@@ -59,33 +65,32 @@
                                 @if (User.IsInRole("Admin"))
                                 {
                                     <form asp-area="" asp-page="/Dashboard/Admin/AdminDashboard" method="get" style="display:inline;">
-                                        <button type="submit" class="btn btn-link text-light p-0 border-0 bg-transparent" style="text-decoration: none;">
-                                            Dashboard
+                                        <button type="submit" class="button type1">
+                                            <span class="btn-txt">Dashboard</span>
                                         </button>
                                     </form>
                                 }
                                 else if (User.IsInRole("User"))
                                 {
                                     <form asp-area="" asp-page="/Dashboard/User/UserDashboard" method="get" style="display:inline;">
-                                        <button type="submit" class="btn btn-link text-light p-0 border-0 bg-transparent" style="text-decoration: none;">
-                                            Dashboard
+                                        <button type="submit" class="button type1">
+                                            <span class="btn-txt">Dashboard</span>
                                         </button>
                                     </form>
                                 }
                                 else
                                 {
                                     <form asp-area="" asp-page="/Index" method="get" style="display:inline;">
-                                        <button type="submit" class="btn btn-link text-light p-0 border-0 bg-transparent" style="text-decoration: none;">
-                                            Dashboard
+                                        <button type="submit" class="button type1">
+                                            <span class="btn-txt">Dashboard</span>
                                         </button>
                                     </form>
                                 }
                             </li>
                             <li class="nav-item">
-
                                 <form asp-area="" asp-page="/Booking/BookAppointment" method="get" style="display:inline;">
-                                    <button type="submit" class="btn btn-link text-light p-0 border-0 bg-transparent" style="text-decoration: none;">
-                                        Bokning
+                                    <button type="submit" class="button type1">
+                                        <span class="btn-txt">Bokning</span>
                                     </button>
                                 </form>
                             </li>

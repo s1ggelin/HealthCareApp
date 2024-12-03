@@ -1,5 +1,16 @@
 ﻿@page
 @model HealthCareWebb.Pages.Account.LogoutModel
 
-<h1>Du har blivit utloggad.</h1>
-<p><a asp-page="/Account/Login">Logga in på nytt</a></p>
+<div class="logout-container text-center">
+    <h1 class="mb-4 text-teal">Tack för idag!</h1>
+    <p class="lead mb-4">Du har nu blivit utloggad. Vi hoppas att du har haft en bra upplevelse!</p>
+
+    <div class="card p-3 mb-3 mx-auto" style="max-width: 400px;">
+        <i class="bi bi-check-circle fs-1 text-success mb-3"></i> <!-- Check-circle ikon -->
+        <p class="mb-3">Klicka nedan för att logga in på nytt!</p>
+
+        <a class="btn btn-teal btn-lg" asp-page="/Account/Login">Logga in på nytt</a>
+    </div>
+
+    <p class="mt-3 fw-bold">Vi ses snart igen!</p>
+</div>

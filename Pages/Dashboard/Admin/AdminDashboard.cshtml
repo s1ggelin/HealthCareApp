@@ -16,13 +16,11 @@
     </li>
 </ul>
 
-<h2>Admin Dashboard</h2>
-<p>Välkommen, @Model.Username</p>
-<p>Welcome, your User ID is: @Model.UserId</p>
-
 <div class="tab-content" id="adminTabsContent">
+
     <!-- Tillgänglighet vy -->
     <div class="tab-pane fade show active" id="availability" role="tabpanel" aria-labelledby="availability-tab">
+    <h2>Välkommen @Model.Username</h2>
         <form method="post" asp-page-handler="AddAvailability">
             <!-- Hidden input for CaregiverId -->
             <input type="hidden" id="caregiverId" name="CaregiverId" value="" />
@@ -32,10 +30,13 @@
                     @foreach (var day in Model.DaysOfWeek)
                     {
                         <div class="col-md-2">
-                            <h4>@CultureInfo.CurrentCulture.TextInfo.ToTitleCase(day.ToString("dddd", new CultureInfo("sv-SE")).ToLower()) @day.ToString("dd-MM-yyyy")</h4>
+                            <h4>
+                                <span class="d-block">@CultureInfo.CurrentCulture.TextInfo.ToTitleCase(day.ToString("dddd", new CultureInfo("sv-SE")).ToLower())</span>
+                                <span class="d-block">@day.ToString("dd-MM-yyyy")</span>
+                               </h4>
                             <div class="dropdown">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton@day.DayOfWeek" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Tillgänglighet
+                                    Tillgänglig
                                 </button>
                                 <div class="dropdown-menu p-3" aria-labelledby="dropdownMenuButton@day.DayOfWeek" style="min-width: 200px;">
                                     @for (var hour = 8; hour <= 16; hour++)
@@ -59,7 +60,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary mt-3">Spara tillgänglighet</button>
+            <button type="submit" class="btn btn-teal mt-4">Spara tillgänglighet</button>
         </form>
 
     </div>

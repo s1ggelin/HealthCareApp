@@ -94,17 +94,30 @@
                 </nav>
             }
             <!-- Main content -->
-            <main role="main" class="col-md-9 ms-sm-auto col-lg-10 px-4">
+            <main role="main" class="@((User.Identity.IsAuthenticated ? "col-md-9 ms-sm-auto col-lg-10 px-4" : "col-12 px-4"))">
                 @RenderBody()
             </main>
         </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - Health Care AB - <a asp-area="" asp-page="/Privacy">Privacy</a>
+    <footer class="border-top footer bg-teal text-light box-shadow">
+        <div class="container-fluid d-flex justify-content-between py-0">
+            <!-- Vänster kolumn -->
+            <div class="contact-left">
+                <p class="m-0 p-0">+123-456-7890</p>
+                <p class="m-0 p-0">hello@healthcare.com</p>
+            </div>
+
+            <!-- Höger kolumn -->
+            <div class="contact-right text-end">
+                <p class="m-0 p-0">123 Anywhere St., Any City, ST 12345</p>
+                <p class="m-0 p-0">
+                    <a href="https://localhost:7253/" class="text-light" target="_blank">www.healthcare.com</a>
+                </p>
+            </div>
         </div>
     </footer>
+
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

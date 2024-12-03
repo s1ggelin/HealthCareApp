@@ -90,21 +90,17 @@ button.accept-policy {
   bottom: 0;
   width: 100%;
   white-space: nowrap;
-  line-height: 60px;
+  line-height: normal;
   text-align: center;
   background-color: teal;
+  padding: 10px;
 }
 
-
-@media (max-width: 768px) {
-    #sidebar.sidebar {
-        width: 100%; /* Full width on smaller screens */
-        height: auto;
-        position: relative;
-        top: 0; /* Remove offset */
-    }
-
-    main {
-        margin-left: 0; /* Remove margin for main content */
-    }
+.text-primary {
+    color: #057D7A !important;
 }
+
+.bg-primary {
+    background-color: #057D7A !important;
+}
+

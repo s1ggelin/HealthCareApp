@@ -3,9 +3,10 @@
 @{
 }
 
-<h2>Book an Appointment</h2>
+<h2>Boka möte</h2>
 
 <form method="post" asp-page-handler="BookAppointment">
+
     <div class="booking-section">
         <div class="cards-container">
             @foreach (var slot in Model.AvailableSlots)
@@ -26,6 +27,8 @@
                     </div>
                 </div>
             }
+
+
         </div>
     </div>
 
@@ -37,7 +40,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p><strong>Caregiver ID:</strong> <span id="modalCaregiverId"></span></p>
+                    <p><strong>Läkar-ID:</strong> <span id="modalCaregiverId"></span></p>
                     <p><strong>Datum:</strong> <span id="modalSlotDate"></span></p>
                     <p><strong>Tid:</strong> <span id="modalSlotTime"></span></p>
                     <input type="hidden" id="hiddenCaregiverId" name="AppointmentBooking.CaregiverId" />
@@ -48,7 +51,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
-                    <button type="submit" class="btn btn-primary">Bekräfta</button>
+                    <button type="submit" class="btn btn-teal">Bekräfta</button>
                 </div>
             </div>
         </div>

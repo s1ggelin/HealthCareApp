@@ -1,24 +1,63 @@
-﻿html {
-  font-size: 14px;
+﻿/* Globala inställningar */
+html {
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+/* Fokus på knappar och formulär */
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
+/* Standard sidlayout */
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+}
+
+/* Anpassning av färg */
+:root {
+    --bs-primary: #057D7A; /* Anpassad primär färg */
+    --bs-secondary: #f8f9fa;
+    --bs-success: #198754;
+    --bs-info: #0dcaf0;
+    --bs-warning: #ffc107;
+    --bs-danger: #dc3545;
+    --bs-light: #f8f9fa;
+    --bs-dark: #212529;
+}
+
+/* Anpassade klasser för bakgrund och textfärger */
+.bg-teal {
+    background-color: #057D7A !important;
+}
+
+.text-teal {
+    color: #057D7A !important;
+}
+
+.btn-teal {
+    background-color: #057D7A;
+    color: #fff;
+    border: none;
+}
+
+footer {
+    background-color: #057D7A;
+    color: #fff;
 }
 
 

@@ -59,7 +59,8 @@ namespace HealthCareWebb.Pages.Account
 
                     var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, result.username)
+                new Claim(ClaimTypes.Name, result.username),
+                new Claim("UserId", result.userId.ToString())
             };
 
                     // Add user roles as claims
@@ -109,6 +110,7 @@ namespace HealthCareWebb.Pages.Account
         {
             public string username { get; set; } // Match this with API response
             public List<string> roles { get; set; }
+            public int userId { get; set; }
         }
     }
 }

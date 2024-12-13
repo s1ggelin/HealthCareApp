@@ -4,19 +4,19 @@
     ViewData["Title"] = "Login";
 }
 
-<h2>Login</h2>
+<h2>Inloggning</h2>
 
 <form method="post">
-    <div>
-        <label asp-for="Username">Username:</label>
-        <input asp-for="Username" type="text" />
+    <div class="mb-3">
+        
+        <input asp-for="Username" class="input" placeholder="Användarnamn" />
     </div>
-    <div>
-        <label asp-for="Password">Password:</label>
-        <input asp-for="Password" type="password" />
+    <div class="mb-3">
+        <input asp-for="Password" type="password" class="input" placeholder="Lösenord" />
     </div>
-    <button type="submit">Login</button>
+    <button type="submit" class="login-button">Logga in</button>
 </form>
+
 
 @if (!string.IsNullOrEmpty(Model.ErrorMessage))
 {

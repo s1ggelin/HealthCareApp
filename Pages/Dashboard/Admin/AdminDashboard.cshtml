@@ -2,8 +2,140 @@
 @model HealthCareWebb.Pages.Dashboard.AdminDashboardModel
 @{
     ViewData["Title"] = "Admin Dashboard";
+
+    @using System.Globalization;
+
 }
 
-<h2>Admin Dashboard</h2>
-<p>Welcome, @Model.Username</p>
+<ul class="nav nav-tabs" id="adminTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="availability-tab" data-bs-toggle="tab" href="#availability" role="tab" aria-controls="availability" aria-selected="true">Tillgänglighet</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="upcoming-tab" data-bs-toggle="tab" href="#upcoming" role="tab" aria-controls="upcoming" aria-selected="false">Kommande bokningar</a>
+    </li>
+</ul>
 
+<div class="tab-content" id="adminTabsContent">
+
+    <!-- Tillgänglighet vy -->
+    <div class="tab-pane fade show active" id="availability" role="tabpanel" aria-labelledby="availability-tab">
+    <h2>Välkommen @Model.Username</h2>
+        <form method="post" asp-page-handler="AddAvailability">
+            <!-- Hidden input for CaregiverId -->
+            <input type="hidden" id="caregiverId" name="CaregiverId" value="" />
+
+            <div class="container">
+                <div class="row">
+                    @foreach (var day in Model.DaysOfWeek)
+                    {
+                        <div class="col-md-2">
+                            <h4>
+                                <span class="d-block">@CultureInfo.CurrentCulture.TextInfo.ToTitleCase(day.ToString("dddd", new CultureInfo("sv-SE")).ToLower())</span>
+                                <span class="d-block">@day.ToString("dd-MM-yyyy")</span>
+                               </h4>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton@day.DayOfWeek" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Tillgänglig
+                                </button>
+                                <div class="dropdown-menu p-3" aria-labelledby="dropdownMenuButton@day.DayOfWeek" style="min-width: 200px;">
+                                    @for (var hour = 8; hour <= 16; hour++)
+                                    {
+                                        var timeSlotStart = new DateTime(day.Year, day.Month, day.Day, hour, 0, 0);
+                                        <div class="form-check">
+                                            <input class="form-check-input"
+                                                   type="checkbox"
+                                                   name="SelectedTimeSlots"
+                                                   value="@timeSlotStart.ToString("o")"
+                                                   id="timeSlot@day.DayOfWeek@hour" />
+                                            <label class="form-check-label" for="timeSlot@day.DayOfWeek@hour">
+                                                @($"{hour:00}:00 - {hour + 1:00}:00")
+                                            </label>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-teal mt-4">Spara tillgänglighet</button>
+        </form>
+
+    </div>
+    <!-- Kommande bokningar vy -->
+    <div class="tab-pane fade" id="upcoming" role="tabpanel" aria-labelledby="upcoming-tab">
+        <h3>Kommande bokningar</h3>
+
+        @if (Model.UpcomingAppointments != null && Model.UpcomingAppointments.Any())
+        {
+            <div class="row">
+                @foreach (var appointment in Model.UpcomingAppointments)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card d-flex flex-row rounded-3  ">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <!-- Vertikal information om bokningen -->
+                                <h5 class="card-title">Patient: @appointment.PatientId</h5>
+                                <p class="card-text"><strong>Datum:</strong> @appointment.DateTime.ToString("yyyy-MM-dd")</p>
+                                <p class="card-text"><strong>Tid:</strong> @appointment.DateTime.ToString("HH:mm")</p>
+
+                                <button type="button"
+                                        class="btn btn-danger"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#cancelModal"
+                                        onclick="populateModal(@appointment.Id, '@appointment.PatientId', '@appointment.DateTime.ToString("yyyy-MM-dd")', '@appointment.DateTime.ToString("HH:mm")')">
+                                    Avboka
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p>Inga kommande bokningar.</p>
+        }
+    </div>
+
+    <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-3">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cancelModalLabel">Bekräfta avbokning</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Är du säker på att du vill avboka följande bokning?</p>
+                    <ul>
+                        <li><strong>Boknings-ID:</strong> <span id="modalAppointmentId"></span></li>
+                        <li><strong>Patient ID:</strong> <span id="modalPatientId"></span></li>
+                        <li><strong>Datum:</strong> <span id="modalDate"></span></li>
+                        <li><strong>Tid:</strong> <span id="modalTime"></span></li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
+                    <form method="post" asp-page-handler="DeleteAppointment">
+                        <input type="hidden" asp-for="AppointmentId" id="hiddenAppointmentId" />
+                        <button type="submit" class="btn btn-danger">Avboka bokning</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function populateModal(appointmentId, patientId, date, time) {
+            document.getElementById('modalAppointmentId').textContent = appointmentId; // Fyller gömd input med boknings-ID
+            document.getElementById('modalPatientId').textContent = patientId; // Visar patient-ID i modalen
+            document.getElementById('modalDate').textContent = date; // Visar datum i modalen
+            document.getElementById('modalTime').textContent = time; // Visar tid i modalen
+
+            document.getElementById('hiddenAppointmentId').value = appointmentId;
+            console.log('Appointment ID set:', appointmentId);
+        };
+    </script>
+</div>

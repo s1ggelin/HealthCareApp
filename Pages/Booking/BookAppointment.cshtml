@@ -1,0 +1,92 @@
+﻿@page
+@model HealthCareWebb.Pages.Booking.BookAppointmentModel
+@{
+}
+
+<h2>Boka möte</h2>
+
+<form method="post" asp-page-handler="BookAppointment">
+
+    <div class="booking-section">
+        <div class="cards-container">
+            @foreach (var slot in Model.AvailableSlots)
+            {
+                <div class="card shadow mb-3">
+                    <div class="card-body text-center">
+                        <p><strong>Läkare ID:</strong> @slot.CaregiverId</p>
+                        <p><strong>Datum:</strong> @slot.Date.ToString("dd MMM yyyy")</p>
+                        <p><strong>Tid:</strong> @slot.Date.ToString("HH:mm") - @slot.Date.AddHours(1).ToString("HH:mm")</p>
+                        <button type="button" class="btn btn-primary mt-3"
+                                data-bs-toggle="modal"
+                                data-bs-target="#confirmModal"
+                                data-caregiverid="@slot.CaregiverId"
+                                data-slotdate="@slot.Date"
+                                data-availabilityid="@slot.AvailabilityId">
+                            Boka Tid
+                        </button>
+                    </div>
+                </div>
+            }
+
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalLabel">Bekräfta tid</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Läkar-ID:</strong> <span id="modalCaregiverId"></span></p>
+                    <p><strong>Datum:</strong> <span id="modalSlotDate"></span></p>
+                    <p><strong>Tid:</strong> <span id="modalSlotTime"></span></p>
+                    <input type="hidden" id="hiddenCaregiverId" name="AppointmentBooking.CaregiverId" />
+                    <input type="hidden" id="hiddenSlotDate" name="AppointmentBooking.SelectedSlot" />
+                    <input type="hidden" id="hiddenPatientId" name="PatientId" />
+                    <input type="hidden" id="hiddenAvailabilityId" name="AppointmentBooking.AvailabilityId" /> 
+                    Är du säker på att du vill boka mötet?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
+                    <button type="submit" class="btn btn-teal">Bekräfta</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    var confirmModal = document.getElementById('confirmModal');
+    confirmModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+
+        var caregiverId = button.getAttribute('data-caregiverid');
+        var slotDate = button.getAttribute('data-slotdate');
+        var availabilityId = button.getAttribute('data-availabilityid');
+
+        var dateTime = new Date(slotDate);
+        var formattedTime = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        var formattedDate = dateTime.toLocaleDateString();
+
+        if (!caregiverId || !slotDate || !availabilityId) {
+            console.error('CaregiverId, SlotDate, or AvailabilityId is missing in the button attributes');
+            return;
+        }
+
+        document.getElementById('modalCaregiverId').textContent = caregiverId;
+        document.getElementById('modalSlotDate').textContent = formattedDate;
+        document.getElementById('modalSlotTime').textContent = formattedTime;
+
+        document.getElementById('hiddenCaregiverId').value = caregiverId;
+        document.getElementById('hiddenSlotDate').value = slotDate;
+        document.getElementById('hiddenAvailabilityId').value = availabilityId; 
+
+        console.log('SelectedSlot:', selectedSlot);
+        console.log('CaregiverId:', caregiverId);
+        console.log('PatientId:', patientId);
+        console.log('AvailabilityId:', availabilityId);
+    });
+</script>

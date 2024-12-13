@@ -1,11 +1,87 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Startsida - Health Care AB";
 }
 
-<h1>Welcome to the Application</h1>
-<p>This is the home page.</p>
-<a asp-page="/Account/Login">Login</a> | <a asp-page="/Account/Register">Register</a>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4 text-teal">Boka vård enkelt och snabbt</h1>
 
+            <section class="card mb-4">
+                <div class="card-body">
+                    <p class="card-text text-left">
+                        Vi förstår att din tid är värdefull. Därför har vi utvecklat ett nytt, användarvänligt bokningssystem
+                        som gör din vårdprocess smidigare än någonsin tidigare.
+                    </p>
+                </div>
+            </section>
 
+            <section class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title text-teal">Framtidens vårdbokning</h2>
+                    <p class="card-text">
+                        Med vårt nya digitala bokningssystem kan du nu boka läkarbesök direkt från din dator eller smartphone
+                        - när som helst, varsomhelst. Ingen mer väntan i telefonköer eller krångliga bokningsprocesser.
+                    </p>
+                </div>
+            </section>
+
+            <section class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title text-teal mb-4">Så fungerar det:</h2>
+                    <div class="row">
+                        <div class="col-12 col-md-6 col-lg-3 mb-3">
+                            <div class="d-flex align-items-center">
+                                <span class="me-3 fs-2">🕒</span>
+                                <div>
+                                    <h3 class="h5 text-teal">Flexibel tidsbokning</h3>
+                                    <p class="text-muted">Välj läkare och tidpunkt som passar dig perfekt.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3 mb-3">
+                            <div class="d-flex align-items-center">
+                                <span class="me-3 fs-2">✅</span>
+                                <div>
+                                    <h3 class="h5 text-teal">Direktbekräftelse</h3>
+                                    <p class="text-muted">Få omedelbar bekräftelse på din bokning.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3 mb-3">
+                            <div class="d-flex align-items-center">
+                                <span class="me-3 fs-2">🔄</span>
+                                <div>
+                                    <h3 class="h5 text-teal">Enkel hantering</h3>
+                                    <p class="text-muted">Hantera tider med några enkla klick.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3 mb-3">
+                            <div class="d-flex align-items-center">
+                                <span className="me-3 fs-2">🧘‍♀️</span>
+                                <div>
+                                    <h3 class="h5 text-teal">Stressfri upplevelse</h3>
+                                    <p class="text-muted">Fokusera på det som verkligen spelar roll - din hälsa.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="text-center my-4">
+                <div class="card bg-teal text-white">
+                    <div class="card-body">
+                        <p class="card-text mb-3">Din hälsa, din tid, din kontroll.</p>
+                        <a href="/Account/Login" class="btn btn-light">
+                            Logga in och boka tid nu!
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
